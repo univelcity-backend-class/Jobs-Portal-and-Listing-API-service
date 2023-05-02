@@ -1,15 +1,24 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-
-# Create your models here.
-
-class CustomUser(AbstractUser):
-    email=models.EmailField(verbose_name='Email Address', max_length=30, unique=True)
-
-    REQUIRED_FIELDS=['user_name', 'first_name', 'last_name']
-    USERNAME_FIELD= 'email'
+from django.contrib.auth.models import User
 
 
-    def get_username(self):
-        return self.email
+
+
+class CompanyProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    company_name = models.CharField(max_length=255)
+    company_description = models.TextField()
+    location = models.CharField(max_length=255)
+    website = models.URLField(blank=True)
+
+
+class Job(models.Model):
+    company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+    description = models.CharField(max_length=255)
+    
+
+
+    
+
 
