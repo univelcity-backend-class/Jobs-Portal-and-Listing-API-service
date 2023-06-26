@@ -89,3 +89,36 @@ class RecentJobsListView(APIView):
         jobs = Job.objects.order_by('-id')[:5]
         serializer = JobSerializer(jobs, many=True)
         return Response(serializer.data)
+    
+class UserJobsListView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, username):
+        jobs = Job.objects.filter(company_name__icontains = username).all()
+        serializer = JobSerializer(jobs, many=True)
+        return Response(serializer.data)
+    
+class JobFilterView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        queryset = Job.objects.all()
+
+        job_type = request.query_params.get('job_type')
+        industry = request.query_params.get('industry')
+        category = request.query_params.get('category')
+        skill = request.query_params.get('skill')
+
+        if job_type:
+            queryset = queryset.filter(job_type__icontains=job_type)
+        if industry:
+            queryset = queryset.filter(industry__icontains=industry)
+        if category:
+            queryset = queryset.filter(category__icontains=category)
+        if skill:
+            queryset = queryset.filter(skill__icontains=skill)
+
+        # Serialize the filtered queryset
+        serializer = JobSerializer(queryset, many=True)
+
+        return Response(serializer.data)

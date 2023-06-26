@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserCreate, JobCreateView, CompanyCreateView, JobUpdateView, JobDeleteView, RecentJobsListView
+from .views import UserCreate, JobCreateView, CompanyCreateView, JobUpdateView, JobDeleteView, RecentJobsListView, UserJobsListView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
