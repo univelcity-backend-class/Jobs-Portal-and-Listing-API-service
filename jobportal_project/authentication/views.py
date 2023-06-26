@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.contrib.auth.models import User
 from .models import Job, CompanyProfile
 from .serializers import JobSerializer, CompanyProfileSerializer
-from .serializers import UserSerializer
+from .serializers import UserSerializer, JobDetailSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 class UserCreate(generics.CreateAPIView):
@@ -121,4 +121,12 @@ class JobFilterView(APIView):
         # Serialize the filtered queryset
         serializer = JobSerializer(queryset, many=True)
 
+        return Response(serializer.data)
+    
+class JobDetailView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, job_id):
+        jobs = Job.objects.get(id=job_id)
+        serializer = JobDetailSerializer(jobs)
         return Response(serializer.data)
