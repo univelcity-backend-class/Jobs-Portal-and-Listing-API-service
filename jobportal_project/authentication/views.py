@@ -48,3 +48,36 @@ class JobCreateView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class JobUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = JobSerializer
+
+    def patch(self, request, job_id):
+        try:
+            job = Job.objects.get(id=job_id)
+        except Job.DoesNotExist:
+            return Response({"message": "Job not found."}, status=status.HTTP_404_NOT_FOUND)
+        if request.user.companyprofile.username == job.company_name:
+            serializer = JobSerializer(job, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message':'you are not authorized to update this job'})
+        
+class JobDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = JobSerializer
+
+    def delete(self, request, job_id):
+        try:
+            job = Job.objects.get(id = job_id)
+        except Job.DoesNotExist:
+            return Response({"message": "Job with this id does not exist."}, status=status.HTTP_404_NOT_FOUND)
+        if request.user.companyprofile.username == job.company_name:
+            job.delete()
+            return Response({"message": "Job deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({'message':'you are not authorized to delete this post'})
