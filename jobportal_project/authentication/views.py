@@ -81,3 +81,11 @@ class JobDeleteView(APIView):
             return Response({"message": "Job deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({'message':'you are not authorized to delete this post'})
+        
+class RecentJobsListView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        jobs = Job.objects.order_by('-id')[:5]
+        serializer = JobSerializer(jobs, many=True)
+        return Response(serializer.data)
