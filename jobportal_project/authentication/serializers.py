@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import CompanyProfile, Job
+from rest_framework.fields import CurrentUserDefault
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,18 +22,23 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
 
-
-
 class CompanyProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompanyProfile
-        fields = ('id', 'company_name', 'company_description', 'location', 'website', )
+        fields = ('user', 'username' , 'company_name', 'company_description', 'location', 'website')
+
+
+
 
 
 class JobSerializer(serializers.ModelSerializer):
-    company = CompanyProfileSerializer()
 
     class Meta:
         model = Job
-        fields = ('id', 'title', 'description', 'company', )
+        fields = ('id', 'company','company_name', 'title', 'description','skill' )
 
+class JobDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Job
+        fields = ('id', 'company','company_name', 'title', 'description','job_type', 'industry', 'category', 'skill' )
