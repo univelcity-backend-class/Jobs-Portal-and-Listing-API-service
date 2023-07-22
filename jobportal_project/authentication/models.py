@@ -20,6 +20,7 @@ class Job(models.Model):
     industry = models.CharField(max_length=100)
     category = models.CharField(max_length=50)
     skill = models.CharField(max_length=200)
+    resume = models.FileField(upload_to='resumes/', default='path/to/default_resume.pdf')
 
     def _str_(self) -> str:
         return self.title
