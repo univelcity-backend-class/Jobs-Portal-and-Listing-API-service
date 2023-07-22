@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserCreate, JobCreateView, CompanyCreateView, JobUpdateView, JobDeleteView, RecentJobsListView, UserJobsListView, JobFilterView
+from .views import UserCreate, JobCreateView, CompanyCreateView, JobUpdateView, JobDeleteView, RecentJobsListView, UserJobsListView, JobFilterView, JobApplicationView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -12,5 +12,6 @@ urlpatterns = [
     path('jobs/recent/', RecentJobsListView.as_view(), name='recent-jobs'),
     path('update-job/<int:job_id>/', JobUpdateView.as_view(), name='Job info update'),
     path('login/token/refresh', TokenRefreshView.as_view(), name='token_refresh_view'),
-    path('job-create/', JobCreateView.as_view(), name='job creation')
+    path('job-create/', JobCreateView.as_view(), name='job creation'),
+    path('job-application/<int:job_id>/apply', JobApplicationView.as_view(), name='job application')
  ]

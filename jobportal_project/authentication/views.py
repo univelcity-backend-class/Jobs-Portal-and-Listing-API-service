@@ -130,3 +130,20 @@ class JobDetailView(APIView):
         jobs = Job.objects.get(id=job_id)
         serializer = JobDetailSerializer(jobs)
         return Response(serializer.data)
+    
+class JobApplicationView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = JobSerializer
+
+    def post(request, job_id):
+        try:
+            job= Job.objects.get(pk=job_id)
+        except Job.DoesNotExist:
+            return Response({"error": "Job not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = JobSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

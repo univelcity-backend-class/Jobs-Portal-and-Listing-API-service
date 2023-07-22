@@ -42,3 +42,9 @@ class JobDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = ('id', 'company','company_name', 'title', 'description','job_type', 'industry', 'category', 'skill' )
+
+class JobApplicationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model= Job
+        fields= ('id', 'company', 'title', 'description', 'job_type', 'industry', 'category', 'skill', 'resume') 
